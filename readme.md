@@ -4,7 +4,7 @@ A computer inside Desmos, complete with a custom-built CISC ISA, operating syste
 
 ## Hardware
 Built around the limitations of the desmos graphing calculator where data can only be readily stored as double precision floats. 
-To overcome memory limitations bit-packing is used on the 52 bit mantissa. <br> for efficiency + as a challenge 13 bit instruction are used (52/13 = 4 rem 0)
+To overcome memory limitations bit-packing is used on the 52 bit mantissa. <br> for efficiency + as a challenge 13 bit instructions are used (52/13 = 4 rem 0)
 and a 10 bit word length for data memory (52/10 = 5 rem 2).
 
 ### ALU
@@ -26,7 +26,7 @@ ISA overview             |  mneumonics/opcodes/description
 -------------------------|---------------
 ![](img/ISA.png) | ![](img/opcodes.png)
 
-## Os/Example programs
+## OS/Example programs
 OS allows for file/memory management and connection with screen input/output. Example programs written in custom assembly language:
 - bouncing ball
 - minesweeper
