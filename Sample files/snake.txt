@@ -1,0 +1,142 @@
+start:
+
+\\ r1,r2 dx,dy r3,r4 pointers to snake location
+mov r1, #1
+mov r2, r0
+mov r3, r0
+mov r4, r0
+mov r5, #3
+mov [#0], r5
+mul r5, r5, r5
+mov [#1], r5
+
+bal apple
+
+\\ ------------ GAME LOOP -------------------
+
+gameLoop:
+
+\\ movement code
+in r6, 1
+in r7, 2
+mov r5 [#1000]
+bne r5 r6 detectClick
+mov r5 [#1001]
+bne r7 r5 detectClick
+
+
+after:
+
+\\ load head potion and add movement vector to r6, r7
+mov r5, #13
+add r6, [r4], r1
+rem r6, r6, #16
+add r7, [r4+#1], r2
+rem r7, r7, #16
+cbf r6, r7, r5, #0, #0
+fcb
+
+\\ move head pointer by two and place new head value there
+add r4, r4, #2
+rem r4, r4 #512
+mov [r4], r6
+mov [r4+#1], r7
+
+
+\\ go to board state array position of head, check for apple or snake part
+mul r5, r7, #16
+add r5, r5, r6 
+mov r6, [r5+#512]
+
+mov r7, #1
+mov [r5+#512], r7
+sub r6, r6, r7
+bne r6, r0, cont
+halt
+cont:
+
+sub r6, r6, r7
+beq r6, r0, apple
+
+
+mov r6 [r3]
+mov r7 [r3+#1]
+cbf r6, r7, r0, #0, #0
+add r3, r3, #2
+rem r3, r3, #512
+mul r5, r7, #16
+add r5, r5, r6
+mov [r5+#512], r0 
+
+
+bal gameLoop
+
+\\ -----------------------------------------
+
+\\ Load in apple func
+
+apple:
+mov r5, #3
+in r7 0
+in r6 0
+rem r7, r7, #16
+rem r6, r6, #16
+cbf r7, r6, r5, #0, #0
+mul r6, r6, #16
+add r7, r6, r7
+mov r6, #2
+mov [r7+#512], r6
+fcb
+bal gameLoop
+
+
+
+\\ r6 r7 are screen x and y
+detectClick:
+    mov [#1000] r6
+    mov [#1001] r7
+    mov r5, #16
+
+    blt r6, r7 topRight
+    add r6, r6, r7
+    bgt r6 r5, left
+
+    mov r1 r0
+    mov r2 #1023
+    bal after
+
+    left:
+    mov r1 #1
+    mov r2 r0
+    bal after
+
+    topRight:
+    add r6, r6, r7
+    bgt r6 r5, top
+
+    mov r1 #1023
+    mov r2 r0
+    bal after
+
+    top:
+    mov r1 r0
+    mov r2 #1
+
+    bal after
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+

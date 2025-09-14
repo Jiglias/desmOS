@@ -1,0 +1,318 @@
+start:
+mov r1 #32
+out 0 r1
+out 1 r1
+fcb
+mov r7 #21
+mov r1 r0
+mov r2 r0
+mov r3 #32
+mov r4 #4
+mov r6 #42
+
+
+\\ bal afterpaint
+
+paint:
+cbf r1 r2 r7 #0 #0
+cbf r1 r2 r7 #0 #1
+cbf r1 r2 r7 #0 #2
+cbf r1 r2 r7 #1 #3
+cbf r1 r2 r7 #2 #3
+cbf r1 r2 r7 #3 #3
+add r1 r1 r4
+bne r1 r3 paint
+fcb
+add r2 r2 r4
+mov r1 r0
+bne r2 r3 paint
+
+afterpaint:
+
+// place mines
+    mov r5 #10
+    mov r3 #8
+    mov r7 #1
+addMine:
+    in r1 0
+    in r2 0
+    \\ memory address =  x coord + 9*ycoord + 10
+    rem r1 r1 r3
+    rem r2 r2 r3
+    mul r4 r2 #9
+    add r4 r4 r1
+
+
+    mov r6 [r4+#10]
+    bge r6 r3 addMine
+
+  mul r1 r1 #4
+  mul r2 r2 #4
+  mul r5 r5 #2
+  mov [r5+#198] r1
+  mov [r5+#199] r2
+  div r5 r5 #2
+
+
+    mov [r4+#10] r3
+
+\\ - increase bomb count around bomb -
+    add r1 [r4] r7
+    mov [r4] r1
+
+    add r1 [r4+#1] r7
+    mov [r4+#1] r1
+    
+    add r1 [r4+#2] r7
+    mov [r4+#2] r1
+    
+    add r1 [r4+#9] r7
+    mov [r4+#9] r1
+    
+    add r1 [r4+#11] r7
+    mov [r4+#11] r1
+    
+    add r1 [r4+#18] r7
+    mov [r4+#18] r1
+    
+    add r1 [r4+#19] r7
+    mov [r4+#19] r1
+    
+    add r1 [r4+#20] r7
+    mov [r4+#20] r1
+\\ -----
+    
+
+    sub r5 r5 r7
+    bne r5 r0 addMine
+
+cbf r0 r0 r7 #0 #31
+fcb
+
+\\ ------------------- GAMELOOP ---------------------
+
+gameLoop:
+
+
+in r3 1
+in r4 2
+div r3, r3, #4
+div r4, r4, #4
+
+ball draw
+
+
+bal gameLoop
+
+\\ ---------------------
+
+
+
+\\ routes drawing, r3, r4 is board x and board y
+draw:
+    
+    \\ r7 is memory pos
+    mul r7 r4 #9
+    add r7 r7 r3
+
+    \\ check if square has been seen
+    mov r1 [r7+#100]
+    beq r1 r0 notSeen
+    ret
+    notSeen:
+    not [r7+#100] r0
+
+
+
+    \\ check if square is out of bounds
+    mov r6 #7
+    bgt r3 r6 return
+    bgt r4 r6 return
+
+
+    mul r1 r3 #4
+    mul r2 r4 #4
+    
+    mov r7 [r7+#10]
+
+    beq r7 r0 floodFill
+    bgt r7 r6 die
+    mov r6 #1
+    sub r7 r7 r6
+    beq r7 r0 draw1
+    sub r7 r7 r6
+    beq r7 r0 draw2
+    sub r7 r7 r6
+    beq r7 r0 draw3
+    sub r7 r7 r6
+    beq r7 r0 draw4
+    sub r7 r7 r6
+    beq r7 r0 draw5
+    sub r7 r7 r6
+    beq r7 r0 draw6
+    
+return:
+    ret
+
+floodFill:
+    ball draw0
+    mov r5 #1
+    sub r3 r3 r5
+    ball draw
+    sub r4 r4 r5
+    ball draw
+    add r3 r3 r5
+    ball draw
+    add r3 r3 r5
+    ball draw
+    add r4 r4 r5
+    ball draw
+    add r4 r4 r5
+    ball draw
+    sub r3 r3 r5
+    ball draw
+    sub r3 r3 r5
+    ball draw
+    add r3 r3 r5
+    sub r4 r4 r5
+    ret
+
+
+
+
+
+
+
+\\ -- DRAWING FUNCTIONS, let r1, r2 be screen x,y
+
+die:
+    ball drawBomb
+    mov r3 r0
+    mov r4 #2
+    mov r5 #20
+
+    deathloop: 
+    mov r1 [r3+#200]
+    mov r2 [r3+#201]
+    ball drawBomb
+    add r3 r3 r4
+    bne r3 r5 deathloop
+    halt
+
+
+
+
+drawBomb:
+mov r7 #23
+cbf r1 r2 r7 #1 #0
+cbf r1 r2 r7 #3 #0
+cbf r1 r2 r7 #1 #2
+cbf r1 r2 r7 #3 #2
+fcb
+ret
+
+draw0:
+mov r7 #42
+cbf r1 r2 r7 #1 #0
+cbf r1 r2 r7 #2 #0
+cbf r1 r2 r7 #3 #0
+cbf r1 r2 r7 #1 #1
+cbf r1 r2 r7 #2 #1
+cbf r1 r2 r7 #3 #1
+cbf r1 r2 r7 #1 #2
+cbf r1 r2 r7 #2 #2
+cbf r1 r2 r7 #3 #2
+fcb
+ret
+
+draw1:
+mov r7 #56
+cbf r1 r2 r7 #1 #0
+cbf r1 r2 r7 #2 #0
+cbf r1 r2 r7 #3 #0
+cbf r1 r2 r7 #2 #1
+cbf r1 r2 r7 #2 #2
+cbf r1 r2 r7 #1 #2
+mov r7 #42
+cbf r1 r2 r7 #1 #1
+cbf r1 r2 r7 #3 #1
+cbf r1 r2 r7 #3 #2
+fcb
+ret
+
+
+draw2:
+mov r7 #24
+cbf r1 r2 r7 #2 #0
+cbf r1 r2 r7 #3 #0
+cbf r1 r2 r7 #2 #1
+cbf r1 r2 r7 #2 #2
+cbf r1 r2 r7 #1 #2
+mov r7 #42
+cbf r1 r2 r7 #1 #0
+cbf r1 r2 r7 #1 #1
+cbf r1 r2 r7 #3 #1
+cbf r1 r2 r7 #3 #2
+fcb
+ret
+
+draw3:
+mov r7 #23
+cbf r1 r2 r7 #1 #0
+cbf r1 r2 r7 #2 #0
+cbf r1 r2 r7 #3 #0
+cbf r1 r2 r7 #2 #1
+cbf r1 r2 r7 #3 #1
+cbf r1 r2 r7 #1 #2
+cbf r1 r2 r7 #2 #2
+cbf r1 r2 r7 #3 #2
+mov r7 #42
+cbf r1 r2 r7 #1 #1
+fcb
+ret
+
+draw4:
+mov r7 #33
+cbf r1 r2 r7 #3 #0
+cbf r1 r2 r7 #1 #1
+cbf r1 r2 r7 #2 #1
+cbf r1 r2 r7 #3 #1
+cbf r1 r2 r7 #1 #2
+cbf r1 r2 r7 #3 #2
+mov r7 #42
+cbf r1 r2 r7 #1 #0
+cbf r1 r2 r7 #2 #0
+cbf r1 r2 r7 #2 #2  
+fcb
+ret
+
+draw5:
+mov r7 #22
+cbf r1 r2 r7 #1 #0
+cbf r1 r2 r7 #2 #0
+cbf r1 r2 r7 #2 #1
+cbf r1 r2 r7 #2 #2
+cbf r1 r2 r7 #3 #2
+mov r7 #42
+cbf r1 r2 r7 #1 #2
+cbf r1 r2 r7 #3 #0
+cbf r1 r2 r7 #1 #1
+cbf r1 r2 r7 #3 #1
+fcb
+ret
+
+draw6:
+mov r7 #41
+cbf r1 r2 r7 #1 #0
+cbf r1 r2 r7 #2 #0
+cbf r1 r2 r7 #3 #0
+cbf r1 r2 r7 #1 #1
+cbf r1 r2 r7 #2 #1
+cbf r1 r2 r7 #3 #1
+cbf r1 r2 r7 #1 #2
+mov r7 #42
+cbf r1 r2 r7 #2 #2
+cbf r1 r2 r7 #3 #2
+fcb
+ret
+

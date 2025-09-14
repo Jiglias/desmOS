@@ -1,0 +1,44 @@
+start:
+mov r1 #20
+out 0 r1
+out 1 r1
+mov r1, #1
+mov r2, r1
+in r3 0
+in r4 0
+mov r5, #20
+rem r3 r3 r5
+rem r4 r4 r5
+mov r7, #37
+
+gameLoop:
+
+cbf r3 r4 r0 #0 #0
+add r3, r3, r1
+add r4, r4, r2
+
+\\ check r3 out of bounds
+
+blt r3, r5, contX
+sub r1, r0, r1
+add r3, r1, r3
+add r3, r1, r3
+
+contX:
+\\  check r4 out of bounds
+blt r4, r5, contY 
+sub r2, r0, r2
+add r4, r4, r2
+add r4, r4, r2
+contY:
+
+cbf r3 r4 r7 #0 #0
+fcb
+bal gameLoop
+ 
+
+
+
+
+
+

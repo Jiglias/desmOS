@@ -1,0 +1,155 @@
+start:
+mov r7 #27
+mov r1 #2
+mov r2 #9
+ball drawH
+
+mov r7 #31
+mov r1 #5
+ball drawE
+
+mov r7 #27
+mov r1 #7
+ball drawL
+
+mov r7 #31
+mov r1 #9
+ball drawL
+
+mov r7 #27
+mov r1 #11
+ball drawO
+
+mov r2 #2
+mov r7 #57
+mov r1 #0
+ball drawW
+
+mov r7 #54
+mov r1 #5
+ball drawO
+
+mov r7 #57
+mov r1 #8
+ball drawR
+
+mov r7 #54
+mov r1 #11
+ball drawL
+
+mov r7 #57
+mov r1 #13
+ball drawD
+
+mov r1 r0
+mov r2 #10
+mov r7 #1
+
+wait:
+nop
+add r1 r1 r7
+bne r1 r2 wait
+halt
+
+
+
+drawH:
+cbf r1, r2, r7, #1 #2
+cbf r1, r2, r7, #0 #0
+cbf r1, r2, r7, #0 #1
+cbf r1, r2, r7, #0 #2
+cbf r1, r2, r7, #0 #3
+cbf r1, r2, r7, #0 #4
+cbf r1, r2, r7, #2 #0
+cbf r1, r2, r7, #2 #1
+cbf r1, r2, r7, #2 #2
+cbf r1, r2, r7, #2 #3
+cbf r1, r2, r7, #2 #4
+fcb
+ret
+
+drawE:
+cbf r1, r2, r7, #0 #0
+cbf r1, r2, r7, #0 #1
+cbf r1, r2, r7, #0 #2
+cbf r1, r2, r7, #0 #3
+cbf r1, r2, r7, #0 #4
+cbf r1, r2, r7, #1 #4
+cbf r1, r2, r7, #1 #2
+cbf r1, r2, r7, #1 #0
+fcb 
+ret
+
+drawW:
+cbf r1, r2, r7, #0 #1
+cbf r1, r2, r7, #0 #2
+cbf r1, r2, r7, #0 #3
+cbf r1, r2, r7, #0 #4
+cbf r1, r2, r7, #2 #1
+cbf r1, r2, r7, #2 #2
+cbf r1, r2, r7, #2 #3
+cbf r1, r2, r7, #4 #1
+cbf r1, r2, r7, #4 #2
+cbf r1, r2, r7, #4 #3
+cbf r1, r2, r7, #4 #4
+cbf r1, r2 r7 #1 #0
+cbf r1, r2 r7 #3 #0
+fcb
+ret
+
+drawR:
+cbf r1, r2, r7, #1 #2
+cbf r1, r2, r7, #1 #4
+cbf r1, r2, r7, #0 #0
+cbf r1, r2, r7, #0 #1
+cbf r1, r2, r7, #0 #2
+cbf r1, r2, r7, #0 #3
+cbf r1, r2, r7, #0 #4
+cbf r1, r2, r7, #2 #0
+cbf r1, r2, r7, #2 #1
+cbf r1, r2, r7, #2 #3
+fcb
+ret
+
+drawD:
+cbf r1, r2, r7, #0 #0
+cbf r1, r2, r7, #0 #1
+cbf r1, r2, r7, #0 #2
+cbf r1, r2, r7, #0 #3
+cbf r1, r2, r7, #0 #4
+cbf r1, r2, r7, #2 #1
+cbf r1, r2, r7, #2 #2
+cbf r1, r2, r7, #2 #3
+cbf r1, r2, r7, #1 #0
+cbf r1, r2, r7, #1 #4
+fcb
+ret
+
+
+
+
+drawL:
+cbf r1, r2, r7, #0 #0
+cbf r1, r2, r7, #1 #0
+cbf r1, r2, r7, #0 #1
+cbf r1, r2, r7, #0 #2
+cbf r1, r2, r7, #0 #3
+cbf r1, r2, r7, #0 #4
+fcb
+ret
+
+drawO:
+cbf r1, r2, r7, #0 #0
+cbf r1, r2, r7, #0 #1
+cbf r1, r2, r7, #0 #2
+cbf r1, r2, r7, #0 #3
+cbf r1, r2, r7, #0 #4
+cbf r1, r2, r7, #2 #0
+cbf r1, r2, r7, #2 #1
+cbf r1, r2, r7, #2 #2
+cbf r1, r2, r7, #2 #3
+cbf r1, r2, r7, #2 #4
+cbf r1, r2, r7, #1 #0
+cbf r1, r2, r7, #1 #4
+fcb
+ret
